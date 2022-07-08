@@ -1,19 +1,19 @@
 periodics:
 - agent: kubernetes
-  cluster: build02
+  cluster: build01
   cron: 0 5 * * 2,6
   decorate: true
   decoration_config:
     skip_cloning: true
   extra_refs:
-  - base_ref: release-v1.2
+  - base_ref: release-next
     org: openshift
     repo: knative-eventing
   labels:
     ci-operator.openshift.io/variant: "411"
     ci.openshift.io/generator: prowgen
     pj-rehearse.openshift.io/can-be-rehearsed: "true"
-  name: periodic-ci-openshift-knative-eventing-release-v1.2-411-test-conformance-aws-ocp-411-continuous
+  name: periodic-ci-openshift-knative-eventing-release-next-411-test-conformance-aws-ocp-411-continuous
   spec:
     containers:
     - args:
@@ -63,20 +63,20 @@ periodics:
       secret:
         secretName: result-aggregator
 - agent: kubernetes
-  cluster: build02
+  cluster: build01
   cron: 0 5 * * 2,6
   decorate: true
   decoration_config:
     skip_cloning: true
   extra_refs:
-  - base_ref: release-v1.2
+  - base_ref: release-next
     org: openshift
     repo: knative-eventing
   labels:
     ci-operator.openshift.io/variant: "411"
     ci.openshift.io/generator: prowgen
     pj-rehearse.openshift.io/can-be-rehearsed: "true"
-  name: periodic-ci-openshift-knative-eventing-release-v1.2-411-test-e2e-aws-ocp-411-continuous
+  name: periodic-ci-openshift-knative-eventing-release-next-411-test-e2e-aws-ocp-411-continuous
   spec:
     containers:
     - args:
@@ -126,20 +126,20 @@ periodics:
       secret:
         secretName: result-aggregator
 - agent: kubernetes
-  cluster: build02
+  cluster: build01
   cron: 0 5 * * 2,6
   decorate: true
   decoration_config:
     skip_cloning: true
   extra_refs:
-  - base_ref: release-v1.2
+  - base_ref: release-next
     org: openshift
     repo: knative-eventing
   labels:
     ci-operator.openshift.io/variant: "411"
     ci.openshift.io/generator: prowgen
     pj-rehearse.openshift.io/can-be-rehearsed: "true"
-  name: periodic-ci-openshift-knative-eventing-release-v1.2-411-test-reconciler-aws-ocp-411-continuous
+  name: periodic-ci-openshift-knative-eventing-release-next-411-test-reconciler-aws-ocp-411-continuous
   spec:
     containers:
     - args:
@@ -189,20 +189,20 @@ periodics:
       secret:
         secretName: result-aggregator
 - agent: kubernetes
-  cluster: build02
+  cluster: build01
   cron: 0 5 * * 2,6
   decorate: true
   decoration_config:
     skip_cloning: true
   extra_refs:
-  - base_ref: release-v1.2
+  - base_ref: release-next
     org: openshift
     repo: knative-eventing
   labels:
     ci-operator.openshift.io/variant: "46"
     ci.openshift.io/generator: prowgen
     pj-rehearse.openshift.io/can-be-rehearsed: "true"
-  name: periodic-ci-openshift-knative-eventing-release-v1.2-46-test-conformance-aws-ocp-46-continuous
+  name: periodic-ci-openshift-knative-eventing-release-next-46-test-conformance-aws-ocp-46-continuous
   spec:
     containers:
     - args:
@@ -252,20 +252,20 @@ periodics:
       secret:
         secretName: result-aggregator
 - agent: kubernetes
-  cluster: build02
+  cluster: build01
   cron: 0 5 * * 2,6
   decorate: true
   decoration_config:
     skip_cloning: true
   extra_refs:
-  - base_ref: release-v1.2
+  - base_ref: release-next
     org: openshift
     repo: knative-eventing
   labels:
     ci-operator.openshift.io/variant: "46"
     ci.openshift.io/generator: prowgen
     pj-rehearse.openshift.io/can-be-rehearsed: "true"
-  name: periodic-ci-openshift-knative-eventing-release-v1.2-46-test-e2e-aws-ocp-46-continuous
+  name: periodic-ci-openshift-knative-eventing-release-next-46-test-e2e-aws-ocp-46-continuous
   spec:
     containers:
     - args:
@@ -315,20 +315,20 @@ periodics:
       secret:
         secretName: result-aggregator
 - agent: kubernetes
-  cluster: build02
+  cluster: build01
   cron: 0 5 * * 2,6
   decorate: true
   decoration_config:
     skip_cloning: true
   extra_refs:
-  - base_ref: release-v1.2
+  - base_ref: release-next
     org: openshift
     repo: knative-eventing
   labels:
     ci-operator.openshift.io/variant: "46"
     ci.openshift.io/generator: prowgen
     pj-rehearse.openshift.io/can-be-rehearsed: "true"
-  name: periodic-ci-openshift-knative-eventing-release-v1.2-46-test-reconciler-aws-ocp-46-continuous
+  name: periodic-ci-openshift-knative-eventing-release-next-46-test-reconciler-aws-ocp-46-continuous
   spec:
     containers:
     - args:

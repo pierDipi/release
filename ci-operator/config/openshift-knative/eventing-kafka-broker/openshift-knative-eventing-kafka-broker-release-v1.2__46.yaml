@@ -1,0 +1,467 @@
+base_images:
+  base:
+    name: "4.6"
+    namespace: ocp
+    tag: base
+build_root:
+  project_image:
+    dockerfile_path: openshift-knative/eventing-kafka-broker/openshift/ci-operator/build-image
+images:
+- dockerfile_path: openshift/ci-operator/knative-images/dispatcher/Dockerfile
+  to: knative-eventing-kafka-broker-dispatcher
+- dockerfile_path: openshift/ci-operator/knative-images/kafka-controller/Dockerfile
+  to: knative-eventing-kafka-broker-kafka-controller
+- dockerfile_path: openshift/ci-operator/knative-images/post-install/Dockerfile
+  to: knative-eventing-kafka-broker-post-install
+- dockerfile_path: openshift/ci-operator/knative-images/receiver/Dockerfile
+  to: knative-eventing-kafka-broker-receiver
+- dockerfile_path: openshift/ci-operator/knative-images/webhook-kafka/Dockerfile
+  to: knative-eventing-kafka-broker-webhook-kafka
+- dockerfile_path: openshift/ci-operator/knative-test-images/committed-offset/Dockerfile
+  to: knative-eventing-kafka-broker-test-committed-offset
+- dockerfile_path: openshift/ci-operator/knative-test-images/consumer-group-lag-provider-test/Dockerfile
+  to: knative-eventing-kafka-broker-test-consumer-group-lag-provider-test
+- dockerfile_path: openshift/ci-operator/knative-test-images/event-flaker/Dockerfile
+  to: knative-eventing-kafka-broker-test-event-flaker
+- dockerfile_path: openshift/ci-operator/knative-test-images/event-library/Dockerfile
+  to: knative-eventing-kafka-broker-test-event-library
+- dockerfile_path: openshift/ci-operator/knative-test-images/event-sender/Dockerfile
+  to: knative-eventing-kafka-broker-test-event-sender
+- dockerfile_path: openshift/ci-operator/knative-test-images/eventshub/Dockerfile
+  to: knative-eventing-kafka-broker-test-eventshub
+- dockerfile_path: openshift/ci-operator/knative-test-images/heartbeats/Dockerfile
+  to: knative-eventing-kafka-broker-test-heartbeats
+- dockerfile_path: openshift/ci-operator/knative-test-images/kafka-consumer/Dockerfile
+  to: knative-eventing-kafka-broker-test-kafka-consumer
+- dockerfile_path: openshift/ci-operator/knative-test-images/partitions-replication-verifier/Dockerfile
+  to: knative-eventing-kafka-broker-test-partitions-replication-verifier
+- dockerfile_path: openshift/ci-operator/knative-test-images/performance/Dockerfile
+  to: knative-eventing-kafka-broker-test-performance
+- dockerfile_path: openshift/ci-operator/knative-test-images/print/Dockerfile
+  to: knative-eventing-kafka-broker-test-print
+- dockerfile_path: openshift/ci-operator/knative-test-images/recordevents/Dockerfile
+  to: knative-eventing-kafka-broker-test-recordevents
+- dockerfile_path: openshift/ci-operator/knative-test-images/request-sender/Dockerfile
+  to: knative-eventing-kafka-broker-test-request-sender
+- dockerfile_path: openshift/ci-operator/knative-test-images/wathola-fetcher/Dockerfile
+  to: knative-eventing-kafka-broker-test-wathola-fetcher
+- dockerfile_path: openshift/ci-operator/knative-test-images/wathola-forwarder/Dockerfile
+  to: knative-eventing-kafka-broker-test-wathola-forwarder
+- dockerfile_path: openshift/ci-operator/knative-test-images/wathola-receiver/Dockerfile
+  to: knative-eventing-kafka-broker-test-wathola-receiver
+- dockerfile_path: openshift/ci-operator/knative-test-images/wathola-sender/Dockerfile
+  to: knative-eventing-kafka-broker-test-wathola-sender
+promotion:
+  additional_images:
+    eventing-kafka-broker-src: src
+  disabled: true
+  name: knative-v1.2
+  namespace: openshift
+releases:
+  initial:
+    integration:
+      name: "4.6"
+      namespace: ocp
+  latest:
+    integration:
+      include_built_images: true
+      name: "4.6"
+      namespace: ocp
+resources:
+  '*':
+    requests:
+      cpu: 500m
+      memory: 1Gi
+tests:
+- as: test-e2e-aws-ocp-46
+  cluster_claim:
+    architecture: amd64
+    cloud: aws
+    owner: openshift-ci
+    product: ocp
+    timeout: 1h0m0s
+    version: "4.6"
+  steps:
+    test:
+    - as: test
+      cli: latest
+      commands: make test-e2e
+      dependencies:
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-DISPATCHER
+        name: knative-eventing-kafka-broker-dispatcher
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-KAFKA-CONTROLLER
+        name: knative-eventing-kafka-broker-kafka-controller
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-POST-INSTALL
+        name: knative-eventing-kafka-broker-post-install
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-RECEIVER
+        name: knative-eventing-kafka-broker-receiver
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-WEBHOOK-KAFKA
+        name: knative-eventing-kafka-broker-webhook-kafka
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-COMMITTED-OFFSET
+        name: knative-eventing-kafka-broker-test-committed-offset
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-CONSUMER-GROUP-LAG-PROVIDER-TEST
+        name: knative-eventing-kafka-broker-test-consumer-group-lag-provider-test
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-FLAKER
+        name: knative-eventing-kafka-broker-test-event-flaker
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-LIBRARY
+        name: knative-eventing-kafka-broker-test-event-library
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-SENDER
+        name: knative-eventing-kafka-broker-test-event-sender
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENTSHUB
+        name: knative-eventing-kafka-broker-test-eventshub
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-HEARTBEATS
+        name: knative-eventing-kafka-broker-test-heartbeats
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-KAFKA-CONSUMER
+        name: knative-eventing-kafka-broker-test-kafka-consumer
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PARTITIONS-REPLICATION-VERIFIER
+        name: knative-eventing-kafka-broker-test-partitions-replication-verifier
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PERFORMANCE
+        name: knative-eventing-kafka-broker-test-performance
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PRINT
+        name: knative-eventing-kafka-broker-test-print
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-RECORDEVENTS
+        name: knative-eventing-kafka-broker-test-recordevents
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-REQUEST-SENDER
+        name: knative-eventing-kafka-broker-test-request-sender
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-FETCHER
+        name: knative-eventing-kafka-broker-test-wathola-fetcher
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-FORWARDER
+        name: knative-eventing-kafka-broker-test-wathola-forwarder
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-RECEIVER
+        name: knative-eventing-kafka-broker-test-wathola-receiver
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-SENDER
+        name: knative-eventing-kafka-broker-test-wathola-sender
+      from: src
+      resources:
+        requests:
+          cpu: 100m
+      timeout: 4h0m0s
+    workflow: generic-claim
+- as: test-conformance-aws-ocp-46
+  cluster_claim:
+    architecture: amd64
+    cloud: aws
+    owner: openshift-ci
+    product: ocp
+    timeout: 1h0m0s
+    version: "4.6"
+  steps:
+    test:
+    - as: test
+      cli: latest
+      commands: make test-conformance
+      dependencies:
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-DISPATCHER
+        name: knative-eventing-kafka-broker-dispatcher
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-KAFKA-CONTROLLER
+        name: knative-eventing-kafka-broker-kafka-controller
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-POST-INSTALL
+        name: knative-eventing-kafka-broker-post-install
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-RECEIVER
+        name: knative-eventing-kafka-broker-receiver
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-WEBHOOK-KAFKA
+        name: knative-eventing-kafka-broker-webhook-kafka
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-COMMITTED-OFFSET
+        name: knative-eventing-kafka-broker-test-committed-offset
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-CONSUMER-GROUP-LAG-PROVIDER-TEST
+        name: knative-eventing-kafka-broker-test-consumer-group-lag-provider-test
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-FLAKER
+        name: knative-eventing-kafka-broker-test-event-flaker
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-LIBRARY
+        name: knative-eventing-kafka-broker-test-event-library
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-SENDER
+        name: knative-eventing-kafka-broker-test-event-sender
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENTSHUB
+        name: knative-eventing-kafka-broker-test-eventshub
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-HEARTBEATS
+        name: knative-eventing-kafka-broker-test-heartbeats
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-KAFKA-CONSUMER
+        name: knative-eventing-kafka-broker-test-kafka-consumer
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PARTITIONS-REPLICATION-VERIFIER
+        name: knative-eventing-kafka-broker-test-partitions-replication-verifier
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PERFORMANCE
+        name: knative-eventing-kafka-broker-test-performance
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PRINT
+        name: knative-eventing-kafka-broker-test-print
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-RECORDEVENTS
+        name: knative-eventing-kafka-broker-test-recordevents
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-REQUEST-SENDER
+        name: knative-eventing-kafka-broker-test-request-sender
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-FETCHER
+        name: knative-eventing-kafka-broker-test-wathola-fetcher
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-FORWARDER
+        name: knative-eventing-kafka-broker-test-wathola-forwarder
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-RECEIVER
+        name: knative-eventing-kafka-broker-test-wathola-receiver
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-SENDER
+        name: knative-eventing-kafka-broker-test-wathola-sender
+      from: src
+      resources:
+        requests:
+          cpu: 100m
+      timeout: 4h0m0s
+    workflow: generic-claim
+- as: test-reconciler-aws-ocp-46
+  cluster_claim:
+    architecture: amd64
+    cloud: aws
+    owner: openshift-ci
+    product: ocp
+    timeout: 1h0m0s
+    version: "4.6"
+  steps:
+    test:
+    - as: test
+      cli: latest
+      commands: make test-reconciler
+      dependencies:
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-DISPATCHER
+        name: knative-eventing-kafka-broker-dispatcher
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-KAFKA-CONTROLLER
+        name: knative-eventing-kafka-broker-kafka-controller
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-POST-INSTALL
+        name: knative-eventing-kafka-broker-post-install
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-RECEIVER
+        name: knative-eventing-kafka-broker-receiver
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-WEBHOOK-KAFKA
+        name: knative-eventing-kafka-broker-webhook-kafka
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-COMMITTED-OFFSET
+        name: knative-eventing-kafka-broker-test-committed-offset
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-CONSUMER-GROUP-LAG-PROVIDER-TEST
+        name: knative-eventing-kafka-broker-test-consumer-group-lag-provider-test
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-FLAKER
+        name: knative-eventing-kafka-broker-test-event-flaker
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-LIBRARY
+        name: knative-eventing-kafka-broker-test-event-library
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-SENDER
+        name: knative-eventing-kafka-broker-test-event-sender
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENTSHUB
+        name: knative-eventing-kafka-broker-test-eventshub
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-HEARTBEATS
+        name: knative-eventing-kafka-broker-test-heartbeats
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-KAFKA-CONSUMER
+        name: knative-eventing-kafka-broker-test-kafka-consumer
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PARTITIONS-REPLICATION-VERIFIER
+        name: knative-eventing-kafka-broker-test-partitions-replication-verifier
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PERFORMANCE
+        name: knative-eventing-kafka-broker-test-performance
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PRINT
+        name: knative-eventing-kafka-broker-test-print
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-RECORDEVENTS
+        name: knative-eventing-kafka-broker-test-recordevents
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-REQUEST-SENDER
+        name: knative-eventing-kafka-broker-test-request-sender
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-FETCHER
+        name: knative-eventing-kafka-broker-test-wathola-fetcher
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-FORWARDER
+        name: knative-eventing-kafka-broker-test-wathola-forwarder
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-RECEIVER
+        name: knative-eventing-kafka-broker-test-wathola-receiver
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-SENDER
+        name: knative-eventing-kafka-broker-test-wathola-sender
+      from: src
+      resources:
+        requests:
+          cpu: 100m
+      timeout: 4h0m0s
+    workflow: generic-claim
+- as: test-e2e-aws-ocp-46-continuous
+  cluster_claim:
+    architecture: amd64
+    cloud: aws
+    owner: openshift-ci
+    product: ocp
+    timeout: 1h0m0s
+    version: "4.6"
+  cron: 0 5 * * 2,6
+  steps:
+    test:
+    - as: test
+      cli: latest
+      commands: make test-e2e
+      dependencies:
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-DISPATCHER
+        name: knative-eventing-kafka-broker-dispatcher
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-KAFKA-CONTROLLER
+        name: knative-eventing-kafka-broker-kafka-controller
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-POST-INSTALL
+        name: knative-eventing-kafka-broker-post-install
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-RECEIVER
+        name: knative-eventing-kafka-broker-receiver
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-WEBHOOK-KAFKA
+        name: knative-eventing-kafka-broker-webhook-kafka
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-COMMITTED-OFFSET
+        name: knative-eventing-kafka-broker-test-committed-offset
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-CONSUMER-GROUP-LAG-PROVIDER-TEST
+        name: knative-eventing-kafka-broker-test-consumer-group-lag-provider-test
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-FLAKER
+        name: knative-eventing-kafka-broker-test-event-flaker
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-LIBRARY
+        name: knative-eventing-kafka-broker-test-event-library
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-SENDER
+        name: knative-eventing-kafka-broker-test-event-sender
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENTSHUB
+        name: knative-eventing-kafka-broker-test-eventshub
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-HEARTBEATS
+        name: knative-eventing-kafka-broker-test-heartbeats
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-KAFKA-CONSUMER
+        name: knative-eventing-kafka-broker-test-kafka-consumer
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PARTITIONS-REPLICATION-VERIFIER
+        name: knative-eventing-kafka-broker-test-partitions-replication-verifier
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PERFORMANCE
+        name: knative-eventing-kafka-broker-test-performance
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PRINT
+        name: knative-eventing-kafka-broker-test-print
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-RECORDEVENTS
+        name: knative-eventing-kafka-broker-test-recordevents
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-REQUEST-SENDER
+        name: knative-eventing-kafka-broker-test-request-sender
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-FETCHER
+        name: knative-eventing-kafka-broker-test-wathola-fetcher
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-FORWARDER
+        name: knative-eventing-kafka-broker-test-wathola-forwarder
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-RECEIVER
+        name: knative-eventing-kafka-broker-test-wathola-receiver
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-SENDER
+        name: knative-eventing-kafka-broker-test-wathola-sender
+      from: src
+      resources:
+        requests:
+          cpu: 100m
+      timeout: 4h0m0s
+    workflow: generic-claim
+- as: test-conformance-aws-ocp-46-continuous
+  cluster_claim:
+    architecture: amd64
+    cloud: aws
+    owner: openshift-ci
+    product: ocp
+    timeout: 1h0m0s
+    version: "4.6"
+  cron: 0 5 * * 2,6
+  steps:
+    test:
+    - as: test
+      cli: latest
+      commands: make test-conformance
+      dependencies:
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-DISPATCHER
+        name: knative-eventing-kafka-broker-dispatcher
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-KAFKA-CONTROLLER
+        name: knative-eventing-kafka-broker-kafka-controller
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-POST-INSTALL
+        name: knative-eventing-kafka-broker-post-install
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-RECEIVER
+        name: knative-eventing-kafka-broker-receiver
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-WEBHOOK-KAFKA
+        name: knative-eventing-kafka-broker-webhook-kafka
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-COMMITTED-OFFSET
+        name: knative-eventing-kafka-broker-test-committed-offset
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-CONSUMER-GROUP-LAG-PROVIDER-TEST
+        name: knative-eventing-kafka-broker-test-consumer-group-lag-provider-test
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-FLAKER
+        name: knative-eventing-kafka-broker-test-event-flaker
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-LIBRARY
+        name: knative-eventing-kafka-broker-test-event-library
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-SENDER
+        name: knative-eventing-kafka-broker-test-event-sender
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENTSHUB
+        name: knative-eventing-kafka-broker-test-eventshub
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-HEARTBEATS
+        name: knative-eventing-kafka-broker-test-heartbeats
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-KAFKA-CONSUMER
+        name: knative-eventing-kafka-broker-test-kafka-consumer
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PARTITIONS-REPLICATION-VERIFIER
+        name: knative-eventing-kafka-broker-test-partitions-replication-verifier
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PERFORMANCE
+        name: knative-eventing-kafka-broker-test-performance
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PRINT
+        name: knative-eventing-kafka-broker-test-print
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-RECORDEVENTS
+        name: knative-eventing-kafka-broker-test-recordevents
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-REQUEST-SENDER
+        name: knative-eventing-kafka-broker-test-request-sender
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-FETCHER
+        name: knative-eventing-kafka-broker-test-wathola-fetcher
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-FORWARDER
+        name: knative-eventing-kafka-broker-test-wathola-forwarder
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-RECEIVER
+        name: knative-eventing-kafka-broker-test-wathola-receiver
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-SENDER
+        name: knative-eventing-kafka-broker-test-wathola-sender
+      from: src
+      resources:
+        requests:
+          cpu: 100m
+      timeout: 4h0m0s
+    workflow: generic-claim
+- as: test-reconciler-aws-ocp-46-continuous
+  cluster_claim:
+    architecture: amd64
+    cloud: aws
+    owner: openshift-ci
+    product: ocp
+    timeout: 1h0m0s
+    version: "4.6"
+  cron: 0 5 * * 2,6
+  steps:
+    test:
+    - as: test
+      cli: latest
+      commands: make test-reconciler
+      dependencies:
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-DISPATCHER
+        name: knative-eventing-kafka-broker-dispatcher
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-KAFKA-CONTROLLER
+        name: knative-eventing-kafka-broker-kafka-controller
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-POST-INSTALL
+        name: knative-eventing-kafka-broker-post-install
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-RECEIVER
+        name: knative-eventing-kafka-broker-receiver
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-WEBHOOK-KAFKA
+        name: knative-eventing-kafka-broker-webhook-kafka
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-COMMITTED-OFFSET
+        name: knative-eventing-kafka-broker-test-committed-offset
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-CONSUMER-GROUP-LAG-PROVIDER-TEST
+        name: knative-eventing-kafka-broker-test-consumer-group-lag-provider-test
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-FLAKER
+        name: knative-eventing-kafka-broker-test-event-flaker
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-LIBRARY
+        name: knative-eventing-kafka-broker-test-event-library
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENT-SENDER
+        name: knative-eventing-kafka-broker-test-event-sender
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-EVENTSHUB
+        name: knative-eventing-kafka-broker-test-eventshub
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-HEARTBEATS
+        name: knative-eventing-kafka-broker-test-heartbeats
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-KAFKA-CONSUMER
+        name: knative-eventing-kafka-broker-test-kafka-consumer
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PARTITIONS-REPLICATION-VERIFIER
+        name: knative-eventing-kafka-broker-test-partitions-replication-verifier
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PERFORMANCE
+        name: knative-eventing-kafka-broker-test-performance
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-PRINT
+        name: knative-eventing-kafka-broker-test-print
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-RECORDEVENTS
+        name: knative-eventing-kafka-broker-test-recordevents
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-REQUEST-SENDER
+        name: knative-eventing-kafka-broker-test-request-sender
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-FETCHER
+        name: knative-eventing-kafka-broker-test-wathola-fetcher
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-FORWARDER
+        name: knative-eventing-kafka-broker-test-wathola-forwarder
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-RECEIVER
+        name: knative-eventing-kafka-broker-test-wathola-receiver
+      - env: KNATIVE-EVENTING-KAFKA-BROKER-TEST-WATHOLA-SENDER
+        name: knative-eventing-kafka-broker-test-wathola-sender
+      from: src
+      resources:
+        requests:
+          cpu: 100m
+      timeout: 4h0m0s
+    workflow: generic-claim
+zz_generated_metadata:
+  branch: release-v1.2
+  org: openshift-knative
+  repo: eventing-kafka-broker
+  variant: "46"
